@@ -1,5 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
+import json
 
 
 def parse(url: str) -> BeautifulSoup:
@@ -74,11 +75,9 @@ def celebretions_on_week(words: list) -> dict:
     return days_of_week
 
 
-def save_to_file(prazdniki: dict):
-    with open('prazdniki.txt', 'w', encoding='utf-8') as f:
-        for i in prazdniki.items():
-            f.write(i[0] + ' ' + i[1] + '\n')
-    
+def save_dict_to_json(data, filename):
+    with open(filename, 'w', encoding='utf-8') as json_file:
+        json.dump(data, json_file, ensure_ascii=False, indent=4) 
 def main() -> None:
     url = "https://my-calend.ru/holidays"
     soup = parse(url)
@@ -86,7 +85,7 @@ def main() -> None:
     prazdnili_on_week = celebretions_on_week(words)
     for i in prazdnili_on_week.items():
         print(i)
-    save_to_file(prazdnili_on_week)
+    save_dict_to_json(prazdnili_on_week, 'prazdniki.json')
 
 if __name__ == '__main__':
     main()
